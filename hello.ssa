@@ -1,0 +1,622 @@
+type :ElleMeta = { l, l, w, l, l, w, w }
+type :FILE = { w, l, l, l, l, w }
+data $.3 = { b "true", b 0 }
+data $.4 = { b "false", b 0 }
+data $.786 = { b "*", b 0 }
+data $.792 = { b "%p", b 0 }
+data $.801 = { b "string", b 0 }
+data $.808 = { b "\"", b 0 }
+data $.809 = { b "\"", b 0 }
+data $.811 = { b "\"\\\"\"", b 0 }
+data $.812 = { b "arg", b 0 }
+data $.813 = { b "\"\\\"\"", b 0 }
+data $.823 = { b "string", b 0 }
+data $.824 = { b "string", b 0 }
+data $.825 = { b "string", b 0 }
+data $.836 = { b "__to_string", b 0 }
+data $.838 = { b "string", b 0 }
+data $.849 = { b "i32", b 0 }
+data $.855 = { b "%d", b 0 }
+data $.864 = { b "i64", b 0 }
+data $.870 = { b "%ld", b 0 }
+data $.881 = { b "f32", b 0 }
+data $.884 = { b "f64", b 0 }
+data $.890 = { b "%f", b 0 }
+data $.892 = { b "f32", b 0 }
+data $.907 = { b "char", b 0 }
+data $.914 = { b "'%c'", b 0 }
+data $.916 = { b "%c", b 0 }
+data $.922 = { b "bool", b 0 }
+data $.930 = { b "%s", b 0 }
+data $.943 = { b "<%s at %p>", b 0 }
+data $.1186 = { b "[%s:%d:%d] %s %s = %s\n", b 0 }
+data $.1194 = { b "%s", b 0 }
+data $.1477 = { b "Hello, world!", b 0 }
+data $.1479 = { b "Hello", b 0 }
+data $.1487 = { b "string", b 0 }
+data $.1496 = { b "main", b 0 }
+data $.1498 = { b "hello.l", b 0 }
+function l $bool.to_string(w %self.1) {
+@start
+	jnz %self.1, @ift.2, @iff.2
+@ift.2
+	ret $.3
+@iff.2
+	ret $.4
+@end.2
+	ret 0
+}
+function l $nil() {
+@start
+	ret 0
+}
+export function l $string.len(l %self.107) {
+@start
+	%tmp.108 =l call $strlen(l %self.107)
+	ret %tmp.108
+}
+export function w $string.contains(l %self.113, l %needle.114) {
+@start
+	%tmp.115 =l call $strstr(l %self.113, l %needle.114)
+	%constant.116 =l call $nil()
+	%tmp.117 =w cnel %tmp.115, %constant.116
+	ret %tmp.117
+}
+export function w $string.starts_with(l %self.118, l %prefix.119) {
+@start
+	%tmp.120 =l call $string.len(l %prefix.119)
+	%tmp.121 =w call $strncmp(l %prefix.119, l %self.118, l %tmp.120)
+	%tmp.122 =w ceqw %tmp.121, 0
+	ret %tmp.122
+}
+export function l $string.concat(:ElleMeta %meta.288, ...) {
+@start
+	%offset.289 =l add %meta.288, 16
+	%field.290 =w loadw %offset.289
+	%conv.291 =l extsw %field.290
+	%args.292 =l alloc8 %conv.291
+	vastart %args.292
+	%offset.293 =l add %meta.288, 16
+	%field.294 =w loadw %offset.293
+	%conv.295 =l extsw %field.294
+	%tmp.296 =l mul %conv.295, 8
+	%strings.297 =l alloc8 %tmp.296
+	%offset.298 =l add %meta.288, 16
+	%field.299 =w loadw %offset.298
+	%conv.300 =l extsw %field.299
+	%tmp.301 =l mul %conv.300, 4
+	%sizes.302 =l alloc8 %tmp.301
+	%length.addr.304 =l alloc8 8
+	storel 0, %length.addr.304
+	%i.addr.306 =l alloc8 4
+	storew 0, %i.addr.306
+@loop.307.cond
+	%i.305 =w loadw %i.addr.306
+	%offset.308 =l add %meta.288, 16
+	%field.309 =w loadw %offset.308
+	%tmp.310 =w csltw %i.305, %field.309
+	jnz %tmp.310, @loop.307.body, @loop.307.end
+@loop.307.step
+	%i.305 =w loadw %i.addr.306
+	%tmp.311 =w add %i.305, 1
+	storew %tmp.311, %i.addr.306
+	%i.312 =w loadw %i.addr.306
+	jmp @loop.307.cond
+@loop.307.body
+	%i.312 =w loadw %i.addr.306
+	%i.312 =w loadw %i.addr.306
+	%conv.313 =l extsw %i.312
+	%tmp.314 =l mul 8, %conv.313
+	%tmp.315 =l add %strings.297, %tmp.314
+	%next.316 =l vaarg %args.292
+	storel %next.316, %tmp.315
+	%i.312 =w loadw %i.addr.306
+	%i.312 =w loadw %i.addr.306
+	%conv.317 =l extsw %i.312
+	%tmp.318 =l mul 4, %conv.317
+	%tmp.319 =l add %sizes.302, %tmp.318
+	%i.312 =w loadw %i.addr.306
+	%i.312 =w loadw %i.addr.306
+	%conv.324 =l extsw %i.312
+	%tmp.325 =l mul 8, %conv.324
+	%tmp.326 =l add %strings.297, %tmp.325
+	%load.327 =l loadl %tmp.326
+	%tmp.328 =l call $string.len(l %load.327)
+	storew %tmp.328, %tmp.319
+	%length.303 =l loadl %length.addr.304
+	%i.312 =w loadw %i.addr.306
+	%i.312 =w loadw %i.addr.306
+	%conv.329 =l extsw %i.312
+	%tmp.330 =l mul 4, %conv.329
+	%tmp.331 =l add %sizes.302, %tmp.330
+	%load.332 =w loadw %tmp.331
+	%conv.333 =l extsw %load.332
+	%tmp.334 =l add %length.303, %conv.333
+	storel %tmp.334, %length.addr.304
+	%length.335 =l loadl %length.addr.304
+	jmp @loop.307.step
+@loop.307.end
+	%length.303 =l loadl %length.addr.304
+	%tmp.337 =l add %length.303, 1
+	%size.338 =l copy 1
+	%tmp.339 =l mul %tmp.337, %size.338
+	%tmp.340 =l call $malloc(l %tmp.339)
+	%result.addr.341 =l alloc8 8
+	storel %tmp.340, %result.addr.341
+	%result.336 =l loadl %result.addr.341
+	%not.342 =w ceqw %result.336, 0
+	jnz %not.342, @ift.343, @end.343
+@ift.343
+	%constant.344 =l call $nil()
+	ret %constant.344
+@end.343
+	%index.addr.346 =l alloc8 4
+	storew 0, %index.addr.346
+	storew 0, %i.addr.306
+	%i.347 =w loadw %i.addr.306
+@loop.348.cond
+	%i.347 =w loadw %i.addr.306
+	%offset.349 =l add %meta.288, 16
+	%field.350 =w loadw %offset.349
+	%tmp.351 =w csltw %i.347, %field.350
+	jnz %tmp.351, @loop.348.body, @loop.348.end
+@loop.348.step
+	%i.347 =w loadw %i.addr.306
+	%tmp.352 =w add %i.347, 1
+	storew %tmp.352, %i.addr.306
+	%i.353 =w loadw %i.addr.306
+	jmp @loop.348.cond
+@loop.348.body
+	%i.353 =w loadw %i.addr.306
+	%i.353 =w loadw %i.addr.306
+	%conv.355 =l extsw %i.353
+	%tmp.356 =l mul 8, %conv.355
+	%tmp.357 =l add %strings.297, %tmp.356
+	%load.358 =l loadl %tmp.357
+	%current.addr.359 =l alloc8 8
+	storel %load.358, %current.addr.359
+	%j.addr.361 =l alloc8 4
+	storew 0, %j.addr.361
+@loop.362.cond
+	%j.360 =w loadw %j.addr.361
+	%i.353 =w loadw %i.addr.306
+	%i.353 =w loadw %i.addr.306
+	%conv.363 =l extsw %i.353
+	%tmp.364 =l mul 4, %conv.363
+	%tmp.365 =l add %sizes.302, %tmp.364
+	%load.366 =w loadw %tmp.365
+	%tmp.367 =w csltw %j.360, %load.366
+	jnz %tmp.367, @loop.362.body, @loop.362.end
+@loop.362.step
+	%j.360 =w loadw %j.addr.361
+	%tmp.368 =w add %j.360, 1
+	storew %tmp.368, %j.addr.361
+	%j.369 =w loadw %j.addr.361
+	jmp @loop.362.cond
+@loop.362.body
+	%result.336 =l loadl %result.addr.341
+	%index.345 =w loadw %index.addr.346
+	%result.336 =l loadl %result.addr.341
+	%index.345 =w loadw %index.addr.346
+	%conv.370 =l extsw %index.345
+	%tmp.371 =l mul 1, %conv.370
+	%tmp.372 =l add %result.336, %tmp.371
+	%current.354 =l loadl %current.addr.359
+	%j.369 =w loadw %j.addr.361
+	%current.354 =l loadl %current.addr.359
+	%j.369 =w loadw %j.addr.361
+	%conv.373 =l extsw %j.369
+	%tmp.374 =l mul 1, %conv.373
+	%tmp.375 =l add %current.354, %tmp.374
+	%load.376 =w loadsb %tmp.375
+	storeb %load.376, %tmp.372
+	%index.345 =w loadw %index.addr.346
+	%tmp.377 =w add %index.345, 1
+	storew %tmp.377, %index.addr.346
+	%index.378 =w loadw %index.addr.346
+	jmp @loop.362.step
+@loop.362.end
+	jmp @loop.348.step
+@loop.348.end
+	%result.336 =l loadl %result.addr.341
+	%index.345 =w loadw %index.addr.346
+	%result.336 =l loadl %result.addr.341
+	%index.345 =w loadw %index.addr.346
+	%conv.379 =l extsw %index.345
+	%tmp.380 =l mul 1, %conv.379
+	%tmp.381 =l add %result.336, %tmp.380
+	storeb 0, %tmp.381
+	%result.336 =l loadl %result.addr.341
+	ret %result.336
+}
+export function l $__to_string(l %ty.775, l %args.776, w %wrap.777) {
+@start
+	%constant.779 =l call $nil()
+	%res.addr.780 =l alloc8 8
+	storel %constant.779, %res.addr.780
+	%constant.782 =l call $nil()
+	%fmt.addr.783 =l alloc8 8
+	storel %constant.782, %fmt.addr.783
+	%length.addr.785 =l alloc8 4
+	storew 0, %length.addr.785
+	%tmp.787 =w call $string.contains(l %ty.775, l $.786)
+	jnz %tmp.787, @ift.788, @end.788
+@ift.788
+	%next.790 =l vaarg %args.776
+	%arg.addr.791 =l alloc8 8
+	storel %next.790, %arg.addr.791
+	storel $.792, %fmt.addr.783
+	%fmt.793 =l loadl %fmt.addr.783
+	%constant.794 =l call $nil()
+	%fmt.793 =l loadl %fmt.addr.783
+	%arg.789 =l loadl %arg.addr.791
+	%tmp.795 =w call $snprintf(l %constant.794, w 0, l %fmt.793, ..., l %arg.789)
+	storew %tmp.795, %length.addr.785
+	%length.796 =w loadw %length.addr.785
+	%length.796 =w loadw %length.addr.785
+	%conv.797 =l extsw %length.796
+	%tmp.798 =l call $malloc(l %conv.797)
+	storel %tmp.798, %res.addr.780
+	%res.799 =l loadl %res.addr.780
+	%res.799 =l loadl %res.addr.780
+	%fmt.793 =l loadl %fmt.addr.783
+	%arg.789 =l loadl %arg.addr.791
+	%tmp.800 =w call $sprintf(l %res.799, l %fmt.793, ..., l %arg.789)
+	%res.799 =l loadl %res.addr.780
+	ret %res.799
+@end.788
+	%tmp.802 =w call $string.starts_with(l %ty.775, l $.801)
+	jnz %tmp.802, @ift.803, @end.803
+@ift.803
+	%next.805 =l vaarg %args.776
+	%arg.addr.806 =l alloc8 8
+	storel %next.805, %arg.addr.806
+	jnz %wrap.777, @ift.807, @end.807
+@ift.807
+	%arg.804 =l loadl %arg.addr.806
+	%struct.810 =l alloc8 44
+	%conv.814 =l extsw 3
+	%tmp.815 =l mul 8, %conv.814
+	%tmp.817 =l add %tmp.815, 4
+	%array.full.816 =l alloc8 %tmp.817
+	storew 3, %array.full.816
+	%array.818 =l add %array.full.816, 4
+	%array.offset.819 =l add %array.818, 0
+	storel $.811, %array.offset.819
+	%array.offset.820 =l add %array.818, 8
+	storel $.812, %array.offset.820
+	%array.offset.821 =l add %array.818, 16
+	storel $.813, %array.offset.821
+	%offset.822 =l add %struct.810, 0
+	storel %array.818, %offset.822
+	%conv.826 =l extsw 3
+	%tmp.827 =l mul 8, %conv.826
+	%tmp.829 =l add %tmp.827, 4
+	%array.full.828 =l alloc8 %tmp.829
+	storew 3, %array.full.828
+	%array.830 =l add %array.full.828, 4
+	%array.offset.831 =l add %array.830, 0
+	storel $.823, %array.offset.831
+	%array.offset.832 =l add %array.830, 8
+	storel $.824, %array.offset.832
+	%array.offset.833 =l add %array.830, 16
+	storel $.825, %array.offset.833
+	%offset.834 =l add %struct.810, 8
+	storel %array.830, %offset.834
+	%offset.835 =l add %struct.810, 16
+	storew 3, %offset.835
+	%offset.837 =l add %struct.810, 20
+	storel $.836, %offset.837
+	%offset.839 =l add %struct.810, 28
+	storel $.838, %offset.839
+	%offset.840 =l add %struct.810, 36
+	storew 350, %offset.840
+	%offset.841 =l add %struct.810, 40
+	storew 34, %offset.841
+	%tmp.842 =l call $string.concat(:ElleMeta %struct.810, ..., l $.808, l %arg.804, l $.809)
+	storel %tmp.842, %arg.addr.806
+	%arg.843 =l loadl %arg.addr.806
+@end.807
+	%arg.804 =l loadl %arg.addr.806
+	%tmp.844 =l call $string.len(l %arg.804)
+	%tmp.845 =l add %tmp.844, 1
+	%tmp.846 =l call $malloc(l %tmp.845)
+	storel %tmp.846, %res.addr.780
+	%res.847 =l loadl %res.addr.780
+	%res.847 =l loadl %res.addr.780
+	%arg.804 =l loadl %arg.addr.806
+	%tmp.848 =l call $strcpy(l %res.847, l %arg.804)
+	%res.847 =l loadl %res.addr.780
+	ret %res.847
+@end.803
+	%tmp.850 =w call $string.starts_with(l %ty.775, l $.849)
+	jnz %tmp.850, @ift.851, @end.851
+@ift.851
+	%next.853 =w vaarg %args.776
+	%arg.addr.854 =l alloc8 4
+	storew %next.853, %arg.addr.854
+	storel $.855, %fmt.addr.783
+	%fmt.856 =l loadl %fmt.addr.783
+	%constant.857 =l call $nil()
+	%fmt.856 =l loadl %fmt.addr.783
+	%arg.852 =w loadw %arg.addr.854
+	%tmp.858 =w call $snprintf(l %constant.857, w 0, l %fmt.856, ..., w %arg.852)
+	storew %tmp.858, %length.addr.785
+	%length.859 =w loadw %length.addr.785
+	%length.859 =w loadw %length.addr.785
+	%conv.860 =l extsw %length.859
+	%tmp.861 =l call $malloc(l %conv.860)
+	storel %tmp.861, %res.addr.780
+	%res.862 =l loadl %res.addr.780
+	%res.862 =l loadl %res.addr.780
+	%fmt.856 =l loadl %fmt.addr.783
+	%arg.852 =w loadw %arg.addr.854
+	%tmp.863 =w call $sprintf(l %res.862, l %fmt.856, ..., w %arg.852)
+@end.851
+	%tmp.865 =w call $string.starts_with(l %ty.775, l $.864)
+	jnz %tmp.865, @ift.866, @end.866
+@ift.866
+	%next.868 =l vaarg %args.776
+	%arg.addr.869 =l alloc8 8
+	storel %next.868, %arg.addr.869
+	storel $.870, %fmt.addr.783
+	%fmt.871 =l loadl %fmt.addr.783
+	%constant.872 =l call $nil()
+	%fmt.871 =l loadl %fmt.addr.783
+	%arg.867 =l loadl %arg.addr.869
+	%tmp.873 =w call $snprintf(l %constant.872, w 0, l %fmt.871, ..., l %arg.867)
+	storew %tmp.873, %length.addr.785
+	%length.874 =w loadw %length.addr.785
+	%length.874 =w loadw %length.addr.785
+	%conv.875 =l extsw %length.874
+	%tmp.876 =l call $malloc(l %conv.875)
+	storel %tmp.876, %res.addr.780
+	%res.877 =l loadl %res.addr.780
+	%res.877 =l loadl %res.addr.780
+	%fmt.871 =l loadl %fmt.addr.783
+	%arg.867 =l loadl %arg.addr.869
+	%tmp.878 =w call $sprintf(l %res.877, l %fmt.871, ..., l %arg.867)
+@end.866
+	%tmp.882 =w call $string.starts_with(l %ty.775, l $.881)
+	%or.880 =w copy 0
+@or.left.879
+	%or.left.883 =w ceqw %tmp.882, 0
+	jnz %or.left.883, @or.right.879, @or.left.match.879
+@or.right.879
+	%tmp.885 =w call $string.starts_with(l %ty.775, l $.884)
+	%or.right.886 =w ceqw %tmp.885, 0
+	jnz %or.right.886, @or.end.879, @or.right.match.879
+@or.left.match.879
+	%or.880 =w copy %tmp.882
+	jmp @or.end.879
+@or.right.match.879
+	%or.880 =w copy %tmp.885
+	jmp @or.end.879
+@or.end.879
+	jnz %or.880, @ift.887, @end.887
+@ift.887
+	%arg.addr.889 =l alloc8 8
+	stored d_0, %arg.addr.889
+	storel $.890, %fmt.addr.783
+	%fmt.891 =l loadl %fmt.addr.783
+	%tmp.893 =w call $string.starts_with(l %ty.775, l $.892)
+	jnz %tmp.893, @ift.894, @iff.894
+@ift.894
+	%next.895 =s vaarg %args.776
+	%conv.896 =d exts %next.895
+	stored %conv.896, %arg.addr.889
+	%arg.897 =d loadd %arg.addr.889
+	jmp @end.894
+@iff.894
+	%next.898 =d vaarg %args.776
+	stored %next.898, %arg.addr.889
+	%arg.899 =d loadd %arg.addr.889
+@end.894
+	%constant.900 =l call $nil()
+	%fmt.891 =l loadl %fmt.addr.783
+	%arg.888 =d loadd %arg.addr.889
+	%tmp.901 =w call $snprintf(l %constant.900, w 0, l %fmt.891, ..., d %arg.888)
+	storew %tmp.901, %length.addr.785
+	%length.902 =w loadw %length.addr.785
+	%length.902 =w loadw %length.addr.785
+	%conv.903 =l extsw %length.902
+	%tmp.904 =l call $malloc(l %conv.903)
+	storel %tmp.904, %res.addr.780
+	%res.905 =l loadl %res.addr.780
+	%res.905 =l loadl %res.addr.780
+	%fmt.891 =l loadl %fmt.addr.783
+	%arg.888 =d loadd %arg.addr.889
+	%tmp.906 =w call $sprintf(l %res.905, l %fmt.891, ..., d %arg.888)
+@end.887
+	%tmp.908 =w call $string.starts_with(l %ty.775, l $.907)
+	jnz %tmp.908, @ift.909, @end.909
+@ift.909
+	%next.911 =w vaarg %args.776
+	%arg.addr.912 =l alloc8 1
+	storeb %next.911, %arg.addr.912
+	jnz %wrap.777, @ift.913, @iff.913
+@ift.913
+	storel $.914, %fmt.addr.783
+	%fmt.915 =l loadl %fmt.addr.783
+	jmp @end.913
+@iff.913
+	storel $.916, %fmt.addr.783
+	%fmt.917 =l loadl %fmt.addr.783
+@end.913
+	%length.784 =w loadw %length.addr.785
+	%conv.918 =l extsw %length.784
+	%tmp.919 =l call $malloc(l %conv.918)
+	storel %tmp.919, %res.addr.780
+	%res.920 =l loadl %res.addr.780
+	%res.920 =l loadl %res.addr.780
+	%fmt.781 =l loadl %fmt.addr.783
+	%arg.910 =w loadsb %arg.addr.912
+	%tmp.921 =w call $sprintf(l %res.920, l %fmt.781, ..., w %arg.910)
+@end.909
+	%tmp.923 =w call $string.starts_with(l %ty.775, l $.922)
+	jnz %tmp.923, @ift.924, @end.924
+@ift.924
+	%next.927 =w vaarg %args.776
+	%tmp.928 =l call $bool.to_string(w %next.927)
+	%arg.addr.929 =l alloc8 8
+	storel %tmp.928, %arg.addr.929
+	storel $.930, %fmt.addr.783
+	%fmt.931 =l loadl %fmt.addr.783
+	%arg.925 =l loadl %arg.addr.929
+	%tmp.932 =l call $string.len(l %arg.925)
+	%tmp.933 =l add %tmp.932, 1
+	%tmp.934 =l call $malloc(l %tmp.933)
+	storel %tmp.934, %res.addr.780
+	%res.935 =l loadl %res.addr.780
+	%res.935 =l loadl %res.addr.780
+	%fmt.931 =l loadl %fmt.addr.783
+	%arg.925 =l loadl %arg.addr.929
+	%tmp.936 =w call $sprintf(l %res.935, l %fmt.931, ..., l %arg.925)
+@end.924
+	%res.778 =l loadl %res.addr.780
+	%constant.937 =l call $nil()
+	%tmp.938 =w ceql %res.778, %constant.937
+	jnz %tmp.938, @ift.939, @end.939
+@ift.939
+	%next.941 =l vaarg %args.776
+	%arg.addr.942 =l alloc8 8
+	storel %next.941, %arg.addr.942
+	storel $.943, %fmt.addr.783
+	%fmt.944 =l loadl %fmt.addr.783
+	%constant.945 =l call $nil()
+	%fmt.944 =l loadl %fmt.addr.783
+	%arg.940 =l loadl %arg.addr.942
+	%tmp.946 =w call $snprintf(l %constant.945, w 0, l %fmt.944, ..., l %ty.775, l %arg.940)
+	storew %tmp.946, %length.addr.785
+	%length.947 =w loadw %length.addr.785
+	%length.947 =w loadw %length.addr.785
+	%conv.948 =l extsw %length.947
+	%tmp.949 =l call $malloc(l %conv.948)
+	storel %tmp.949, %res.addr.780
+	%res.950 =l loadl %res.addr.780
+	%res.950 =l loadl %res.addr.780
+	%fmt.944 =l loadl %fmt.addr.783
+	%arg.940 =l loadl %arg.addr.942
+	%tmp.951 =w call $sprintf(l %res.950, l %fmt.944, ..., l %ty.775, l %arg.940)
+@end.939
+	%res.778 =l loadl %res.addr.780
+	ret %res.778
+}
+function w $__print(l %args.1149, :ElleMeta %meta.1150, w %wrap.1151, w %full.1152, w %newline.1153) {
+@start
+	%i.addr.1155 =l alloc8 4
+	storew 0, %i.addr.1155
+@loop.1156.cond
+	%i.1154 =w loadw %i.addr.1155
+	%offset.1157 =l add %meta.1150, 16
+	%field.1158 =w loadw %offset.1157
+	%tmp.1159 =w csltw %i.1154, %field.1158
+	jnz %tmp.1159, @loop.1156.body, @loop.1156.end
+@loop.1156.step
+	%i.1154 =w loadw %i.addr.1155
+	%tmp.1160 =w add %i.1154, 1
+	storew %tmp.1160, %i.addr.1155
+	%i.1161 =w loadw %i.addr.1155
+	jmp @loop.1156.cond
+@loop.1156.body
+	%offset.1163 =l add %meta.1150, 8
+	%field.1164 =l loadl %offset.1163
+	%i.1161 =w loadw %i.addr.1155
+	%offset.1165 =l add %meta.1150, 8
+	%field.1166 =l loadl %offset.1165
+	%i.1161 =w loadw %i.addr.1155
+	%conv.1167 =l extsw %i.1161
+	%tmp.1168 =l mul 8, %conv.1167
+	%tmp.1169 =l add %field.1166, %tmp.1168
+	%load.1170 =l loadl %tmp.1169
+	%ty.addr.1171 =l alloc8 8
+	storel %load.1170, %ty.addr.1171
+	%offset.1173 =l add %meta.1150, 0
+	%field.1174 =l loadl %offset.1173
+	%i.1161 =w loadw %i.addr.1155
+	%offset.1175 =l add %meta.1150, 0
+	%field.1176 =l loadl %offset.1175
+	%i.1161 =w loadw %i.addr.1155
+	%conv.1177 =l extsw %i.1161
+	%tmp.1178 =l mul 8, %conv.1177
+	%tmp.1179 =l add %field.1176, %tmp.1178
+	%load.1180 =l loadl %tmp.1179
+	%expr.addr.1181 =l alloc8 8
+	storel %load.1180, %expr.addr.1181
+	%ty.1162 =l loadl %ty.addr.1171
+	%tmp.1183 =l call $__to_string(l %ty.1162, l %args.1149, w %wrap.1151)
+	%res.addr.1184 =l alloc8 8
+	storel %tmp.1183, %res.addr.1184
+	jnz %full.1152, @ift.1185, @iff.1185
+@ift.1185
+	%offset.1187 =l add %meta.1150, 28
+	%field.1188 =l loadl %offset.1187
+	%offset.1189 =l add %meta.1150, 36
+	%field.1190 =w loadw %offset.1189
+	%offset.1191 =l add %meta.1150, 40
+	%field.1192 =w loadw %offset.1191
+	%ty.1162 =l loadl %ty.addr.1171
+	%expr.1172 =l loadl %expr.addr.1181
+	%res.1182 =l loadl %res.addr.1184
+	%tmp.1193 =w call $printf(l $.1186, ..., l %field.1188, w %field.1190, w %field.1192, l %ty.1162, l %expr.1172, l %res.1182)
+	jmp @end.1185
+@iff.1185
+	%res.1182 =l loadl %res.addr.1184
+	%tmp.1195 =w call $printf(l $.1194, ..., l %res.1182)
+@end.1185
+	%res.1182 =l loadl %res.addr.1184
+	%tmp.1196 =w call $free(l %res.1182)
+	jmp @loop.1156.step
+@loop.1156.end
+	jnz %newline.1153, @ift.1197, @end.1197
+@ift.1197
+	%tmp.1198 =w call $putchar(w 10)
+@end.1197
+	ret 0
+}
+export function w $io.println(:ElleMeta %meta.1296, ...) {
+@start
+	%offset.1297 =l add %meta.1296, 16
+	%field.1298 =w loadw %offset.1297
+	%conv.1299 =l extsw %field.1298
+	%args.1300 =l alloc8 %conv.1299
+	vastart %args.1300
+	%tmp.1301 =w call $__print(l %args.1300, :ElleMeta %meta.1296, w 0, w 0, w 1)
+	ret 0
+}
+export function w $main() {
+@start
+	%struct.1478 =l alloc8 44
+	%conv.1480 =l extsw 1
+	%tmp.1481 =l mul 8, %conv.1480
+	%tmp.1483 =l add %tmp.1481, 4
+	%array.full.1482 =l alloc8 %tmp.1483
+	storew 1, %array.full.1482
+	%array.1484 =l add %array.full.1482, 4
+	%array.offset.1485 =l add %array.1484, 0
+	storel $.1479, %array.offset.1485
+	%offset.1486 =l add %struct.1478, 0
+	storel %array.1484, %offset.1486
+	%conv.1488 =l extsw 1
+	%tmp.1489 =l mul 8, %conv.1488
+	%tmp.1491 =l add %tmp.1489, 4
+	%array.full.1490 =l alloc8 %tmp.1491
+	storew 1, %array.full.1490
+	%array.1492 =l add %array.full.1490, 4
+	%array.offset.1493 =l add %array.1492, 0
+	storel $.1487, %array.offset.1493
+	%offset.1494 =l add %struct.1478, 8
+	storel %array.1492, %offset.1494
+	%offset.1495 =l add %struct.1478, 16
+	storew 1, %offset.1495
+	%offset.1497 =l add %struct.1478, 20
+	storel $.1496, %offset.1497
+	%offset.1499 =l add %struct.1478, 28
+	storel $.1498, %offset.1499
+	%offset.1500 =l add %struct.1478, 36
+	storew 4, %offset.1500
+	%offset.1501 =l add %struct.1478, 40
+	storew 17, %offset.1501
+	%tmp.1502 =w call $io.println(:ElleMeta %struct.1478, ..., l $.1477)
+	ret 0
+}
